@@ -30,7 +30,7 @@ class ExtendedTabBarView extends _TabBarView {
     this.keepTab = false,
     this.onTabChanging,
     this.onTabActive,
-    this.onDrag,
+    this.onDragTab,
     this.transformer,
   });
 
@@ -90,7 +90,7 @@ class ExtendedTabBarView extends _TabBarView {
   final ValueChanged<int>? onTabActive;
 
   /// todo check, add by doersoul@126.com
-  final ValueChanged<bool>? onDrag;
+  final ValueChanged<bool>? onDragTab;
 
   /// todo check, add by doersoul@126.com
   final ExtendedTransformer? transformer;
@@ -224,7 +224,7 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
   void _pageListener() {
     _position.value = linkScrollController.offset;
 
-    widget.onDrag?.call(linkScrollController.hasDrag);
+    widget.onDragTab?.call(linkScrollController.hasDrag);
 
     double? page = _pageController.page;
     if (page != null && page != _currentTabBarViewIndex) {
