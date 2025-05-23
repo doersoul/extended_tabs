@@ -37,7 +37,8 @@ class _TabBarView extends StatefulWidget {
   ///
   /// If [TabController] is not provided, then the value of [DefaultTabController.of]
   /// will be used.
-  final TabController? controller;
+  /// todo check, update by doersoul@126.com
+  final ExtendedTabController? controller;
 
   /// One widget per tab.
   ///
@@ -85,6 +86,15 @@ class _TabBarViewState<T extends _TabBarView> extends LinkScrollState<T> {
   // dispose the old one. In that case the old controller's animation will be
   // null and should not be accessed.
   bool get _controllerIsValid => _controller?.animation != null;
+
+  /// todo check, add by doersoul@126.com
+  bool get _isJump {
+    if (_controller == null || _controller is! ExtendedTabController) {
+      return false;
+    }
+
+    return (_controller as ExtendedTabController).jump;
+  }
 
   void _updateTabController() {
     final TabController? newController =
@@ -204,7 +214,8 @@ class _TabBarViewState<T extends _TabBarView> extends LinkScrollState<T> {
   }
 
   Future<void> _warpToAdjacentTab(Duration duration) async {
-    if (duration == Duration.zero) {
+    // todo check, update by doersoul@126.com
+    if (_isJump || duration == Duration.zero) {
       _jumpToPage(_currentIndex!);
     } else {
       await _animateToPage(_currentIndex!,
@@ -238,13 +249,14 @@ class _TabBarViewState<T extends _TabBarView> extends LinkScrollState<T> {
       _childrenWithKey[previousIndex] = temp;
     });
 
-    // Make a first jump to the adjacent page.
-    _jumpToPage(initialPage);
-
     // Jump or animate to the destination page.
-    if (duration == Duration.zero) {
+    // todo check, update by doersoul@126.com
+    if (_isJump || duration == Duration.zero) {
       _jumpToPage(_currentIndex!);
     } else {
+      // Make a first jump to the adjacent page.
+      _jumpToPage(initialPage);
+
       await _animateToPage(_currentIndex!,
           duration: duration, curve: Curves.ease);
     }

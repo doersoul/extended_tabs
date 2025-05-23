@@ -1,26 +1,37 @@
 import 'package:extended_tabs/src/extended/page_view.dart';
+import 'package:extended_tabs/src/extended/tab_controller.dart';
+import 'package:extended_tabs/src/gestures/link_controller.dart';
+import 'package:extended_tabs/src/gestures/link_scroll_state.dart';
+import 'package:extended_tabs/src/gestures/scroll_physics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sync_scroll_library/sync_scroll_library.dart';
+
 part 'package:extended_tabs/src/official/tabs.dart';
 
 const ScrollPhysics _defaultScrollPhysics = NeverScrollableScrollPhysics();
+
+/// todo check, add by doersoul@126.com
+typedef ExtendedTransformer = Widget Function(Widget cld, int idx, double pos);
 
 class ExtendedTabBarView extends _TabBarView {
   const ExtendedTabBarView({
     super.key,
     required super.children,
-    super.controller,
-    super.physics,
+    required super.controller,
+    super.physics = extendedScrollPhysics,
     super.dragStartBehavior = DragStartBehavior.start,
     super.viewportFraction = 1.0,
     super.clipBehavior = Clip.hardEdge,
     this.cacheExtent = 0,
     this.link = true,
-    this.pageController,
     this.shouldIgnorePointerWhenScrolling = true,
     this.scrollDirection = Axis.horizontal,
+    this.keepTab = false,
+    this.onTabChanging,
+    this.onTabActive,
+    this.onDrag,
+    this.transformer,
   });
 
   /// cache page count
@@ -33,8 +44,9 @@ class ExtendedTabBarView extends _TabBarView {
   /// default is true
   final bool link;
 
+  /// todo check, remove by doersoul@126.com
   /// The PageController inside, [PageController.initialPage] should the same as [TabController.initialIndex]
-  final LinkPageController? pageController;
+  /// final LinkPageController? pageController;
 
   /// Whether the contents of the widget should ignore [PointerEvent] inputs.
   ///
@@ -68,11 +80,32 @@ class ExtendedTabBarView extends _TabBarView {
   /// Defaults to [Axis.horizontal].
   final Axis scrollDirection;
 
+  /// todo check, add by doersoul@126.com
+  final bool keepTab;
+
+  /// todo check, add by doersoul@126.com
+  final ValueChanged<double>? onTabChanging;
+
+  /// todo check, add by doersoul@126.com
+  final ValueChanged<int>? onTabActive;
+
+  /// todo check, add by doersoul@126.com
+  final ValueChanged<bool>? onDrag;
+
+  /// todo check, add by doersoul@126.com
+  final ExtendedTransformer? transformer;
+
   @override
   State<ExtendedTabBarView> createState() => ExtendedTabBarViewState();
 }
 
 class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
+  /// todo check, add by doersoul@126.com
+  final ValueNotifier<double> _position = ValueNotifier(-1);
+
+  /// todo check, add by doersoul@126.com
+  int _currentTabBarViewIndex = 0;
+
   @override
   bool get link => widget.link;
 
@@ -90,11 +123,18 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
   void didChangeDependencies() {
     _updateTabController();
     _currentIndex = _controller!.index;
-    _pageController = widget.pageController ??
-        LinkPageController(
-          initialPage: _currentIndex ?? 0,
-          viewportFraction: widget.viewportFraction,
-        );
+    _currentTabBarViewIndex = _controller!.index;
+
+    // todo check, update by doersoul@126.com
+    _pageController = LinkPageController(
+      initialPage: _currentIndex ?? 0,
+      viewportFraction: widget.viewportFraction,
+      keepPage: widget.keepTab,
+    );
+
+    // todo check, add by doersoul@126.com
+    _pageController.addListener(_pageListener);
+
     super.didChangeDependencies();
   }
 
@@ -102,15 +142,21 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
   void didUpdateWidget(covariant ExtendedTabBarView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if ((widget.pageController != null &&
-            widget.pageController != oldWidget.pageController) ||
-        widget.viewportFraction != oldWidget.viewportFraction) {
-      _pageController = widget.pageController ??
-          LinkPageController(
-            initialPage: _currentIndex ?? 0,
-            viewportFraction: widget.viewportFraction,
-          );
+    // todo check, add by doersoul@126.com
+    if (widget.controller != oldWidget.controller) {
+      _currentTabBarViewIndex = _controller!.index;
     }
+
+    // todo check, remove by doersoul@126.com
+    // if ((widget.pageController != null &&
+    //         widget.pageController != oldWidget.pageController) ||
+    //     widget.viewportFraction != oldWidget.viewportFraction) {
+    //   _pageController = widget.pageController ??
+    //       LinkPageController(
+    //         initialPage: _currentIndex ?? 0,
+    //         viewportFraction: widget.viewportFraction,
+    //       );
+    // }
 
     if (widget.physics != oldWidget.physics) {
       updatePhysics();
@@ -122,12 +168,24 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
     }
   }
 
+  /// todo check, add by doersoul@126.com
+  @override
+  void dispose() {
+    _pageController.removeListener(_pageListener);
+    _pageController.dispose();
+
+    _position.dispose();
+
+    super.dispose();
+  }
+
   @override
   ScrollPhysics? getScrollPhysics() {
+    // todo check，update by doersoul@126.com
     return _defaultScrollPhysics.applyTo(
       widget.physics == null
-          ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
-          : const PageScrollPhysics().applyTo(widget.physics),
+          ? const ClampingScrollPhysics()
+          : const ClampingScrollPhysics().applyTo(widget.physics),
     );
   }
 
@@ -135,6 +193,50 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
   // ignore: unnecessary_overrides
   void linkParent<S extends StatefulWidget, T extends LinkScrollState<S>>() {
     super.linkParent<ExtendedTabBarView, ExtendedTabBarViewState>();
+  }
+
+  /// todo check, update by doersoul@126.com
+  @override
+  _updateChildren() {
+    if (widget.transformer != null) {
+      final List<Widget> children = [];
+      for (int index = 0; index < widget.children.length; index++) {
+        final Widget item = widget.children[index];
+
+        children.add(
+          AnimatedBuilder(
+            animation: _position,
+            builder: (BuildContext context, Widget? child) {
+              return widget.transformer!.call(child!, index, _position.value);
+            },
+            child: item,
+          ),
+        );
+      }
+
+      _childrenWithKey = KeyedSubtree.ensureUniqueKeysForList(children);
+    } else {
+      _childrenWithKey = KeyedSubtree.ensureUniqueKeysForList(widget.children);
+    }
+  }
+
+  /// todo check, add by doersoul@126.com
+  void _pageListener() {
+    _position.value = linkScrollController.offset;
+
+    widget.onDrag?.call(linkScrollController.hasDrag);
+
+    double? page = _pageController.page;
+    if (page != null && page != _currentTabBarViewIndex) {
+      widget.onTabChanging?.call(page);
+
+      int round = page.round();
+      if (round != _currentTabBarViewIndex) {
+        _currentTabBarViewIndex = round;
+
+        widget.onTabActive?.call(round);
+      }
+    }
   }
 
   @override
