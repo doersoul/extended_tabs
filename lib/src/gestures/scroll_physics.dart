@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 /// todo check, add by doersoul@126.com
 final SpringDescription _spring = SpringDescription.withDampingRatio(
   mass: 1,
-  stiffness: 400,
+  stiffness: 512,
 );
 
 const ScrollPhysics extendedScrollPhysics = ExtendedScrollPhysics();
