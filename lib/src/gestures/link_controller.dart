@@ -164,6 +164,7 @@ mixin LinkScrollControllerMixin on ScrollController
     if (_activedLinkParent != null) {
       return;
     }
+
     LinkScrollControllerMixin? activedParent;
     if (textDirection == TextDirection.rtl) {
       delta = -delta;
@@ -181,7 +182,9 @@ mixin LinkScrollControllerMixin on ScrollController
 
     if (activedParent != null) {
       _activedLinkParent = activedParent;
+
       activedParent.handleDragDown(null);
+
       activedParent.handleDragStart(
         DragStartDetails(
           globalPosition: details.globalPosition,
@@ -195,18 +198,21 @@ mixin LinkScrollControllerMixin on ScrollController
   @override
   void attach(ScrollPosition position) {
     super.attach(position);
+
     _syncHandler.attach(position);
   }
 
   @override
   void detach(ScrollPosition position) {
     _syncHandler.detach(position);
+
     super.detach(position);
   }
 
   @override
   void dispose() {
     _syncHandler.forceCancel();
+
     super.dispose();
   }
 }
