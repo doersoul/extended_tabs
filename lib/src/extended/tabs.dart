@@ -195,7 +195,7 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
     super.linkParent<ExtendedTabBarView, ExtendedTabBarViewState>();
   }
 
-  /// todo check, update by doersoul@126.com
+  /// todo check, add by doersoul@126.com
   @override
   _updateChildren() {
     if (widget.transformer != null) {
