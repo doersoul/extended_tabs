@@ -25,7 +25,7 @@ class ExtendedTabBarView extends _TabBarView {
     super.clipBehavior = Clip.hardEdge,
     this.cacheExtent = 0,
     this.link = true,
-    this.shouldIgnorePointerWhenScrolling = true,
+    this.shouldIgnorePointerWhenScrolling = false,
     this.scrollDirection = Axis.horizontal,
     this.keepTab = false,
     this.onTabChanging,

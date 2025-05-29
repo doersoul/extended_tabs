@@ -14,7 +14,7 @@ class ExtendedScrollable extends Scrollable {
     super.dragStartBehavior,
     super.restorationId,
     super.scrollBehavior,
-    this.shouldIgnorePointerWhenScrolling = true,
+    this.shouldIgnorePointerWhenScrolling = false,
   });
 
   /// Whether the contents of the widget should ignore [PointerEvent] inputs.

@@ -22,7 +22,7 @@ class ExtendedPageView extends _PageView {
     super.scrollBehavior,
     super.padEnds = true,
     this.cacheExtent = 0,
-    this.shouldIgnorePointerWhenScrolling = true,
+    this.shouldIgnorePointerWhenScrolling = false,
   });
 
   ExtendedPageView.builder({
@@ -43,7 +43,7 @@ class ExtendedPageView extends _PageView {
     super.scrollBehavior,
     super.padEnds = true,
     this.cacheExtent = 0,
-    this.shouldIgnorePointerWhenScrolling = true,
+    this.shouldIgnorePointerWhenScrolling = false,
   }) : super.builder();
 
   ExtendedPageView.custom({
@@ -62,7 +62,7 @@ class ExtendedPageView extends _PageView {
     super.scrollBehavior,
     super.padEnds = true,
     this.cacheExtent = 0,
-    this.shouldIgnorePointerWhenScrolling = true,
+    this.shouldIgnorePointerWhenScrolling = false,
   }) : super.custom();
 
   /// cache page count
