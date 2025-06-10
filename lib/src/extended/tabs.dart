@@ -2,7 +2,6 @@ import 'package:extended_tabs/src/extended/page_view.dart';
 import 'package:extended_tabs/src/extended/tab_controller.dart';
 import 'package:extended_tabs/src/gestures/link_controller.dart';
 import 'package:extended_tabs/src/gestures/link_scroll_state.dart';
-import 'package:extended_tabs/src/gestures/scroll_physics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,8 @@ class ExtendedTabBarView extends _TabBarView {
     super.key,
     required super.children,
     required super.controller,
-    super.physics = extendedScrollPhysics,
+    // extendedScrollPhysics
+    required super.physics,
     super.dragStartBehavior = DragStartBehavior.start,
     super.viewportFraction = 1.0,
     super.clipBehavior = Clip.hardEdge,
