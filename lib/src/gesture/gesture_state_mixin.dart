@@ -1,4 +1,4 @@
-import 'package:extended_tabs/src/gestures/gesture_mixin.dart';
+import 'package:extended_tabs/src/gesture/gesture_mixin.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 

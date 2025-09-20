@@ -1,6 +1,6 @@
-import 'package:extended_tabs/src/gestures/drag_hold_controller.dart';
-import 'package:extended_tabs/src/gestures/link_scroll_state.dart';
-import 'package:extended_tabs/src/gestures/sync_controller.dart';
+import 'package:extended_tabs/src/gesture/drag_hold_controller.dart';
+import 'package:extended_tabs/src/gesture/link_scroll_state.dart';
+import 'package:extended_tabs/src/gesture/sync_controller.dart';
 import 'package:flutter/widgets.dart';
 
 /// The [LinkScrollController] to sync pixels for all of positions

@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
-import 'package:extended_tabs/src/gestures/drag_hold_controller.dart';
-import 'package:extended_tabs/src/gestures/gesture_mixin.dart';
+import 'package:extended_tabs/src/gesture/drag_hold_controller.dart';
+import 'package:extended_tabs/src/gesture/gesture_mixin.dart';
 import 'package:flutter/widgets.dart';
 
 /// The [SyncScrollController] to sync pixels for all of positions
