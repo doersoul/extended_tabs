@@ -1,5 +1,5 @@
-import 'package:extended_tabs/src/gesture/gesture_state_mixin.dart';
-import 'package:extended_tabs/src/gesture/sync_controller.dart';
+import 'package:extended_tabs/src/gestures/gesture_state_mixin.dart';
+import 'package:extended_tabs/src/gestures/sync_controller.dart';
 import 'package:flutter/widgets.dart';
 
 /// class MyWidget extends StatefulWidget {

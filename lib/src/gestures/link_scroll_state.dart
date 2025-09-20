@@ -1,6 +1,6 @@
-import 'package:extended_tabs/src/gesture/link_controller.dart';
-import 'package:extended_tabs/src/gesture/sync_controller.dart';
-import 'package:extended_tabs/src/gesture/sync_scroll_state.dart';
+import 'package:extended_tabs/src/gestures/link_controller.dart';
+import 'package:extended_tabs/src/gestures/sync_controller.dart';
+import 'package:extended_tabs/src/gestures/sync_scroll_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

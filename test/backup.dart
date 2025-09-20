@@ -6,12 +6,12 @@
 //
 // import 'dart:async';
 //
-// import 'package:flutter/gesture.dart';
+// import 'package:flutter/gestures.dart';
 // import 'package:flutter/material.dart';
 // import 'package:story/common/component/tabview/extended_page_view.dart';
-// import 'package:story/common/gesture/link_controller.dart';
-// import 'package:story/common/gesture/link_scroll_state.dart';
-// import 'package:story/common/gesture/scroll_physics.dart';
+// import 'package:story/common/gestures/link_controller.dart';
+// import 'package:story/common/gestures/link_scroll_state.dart';
+// import 'package:story/common/gestures/scroll_physics.dart';
 //
 // const ScrollPhysics _defaultScrollPhysics = NeverScrollableScrollPhysics();
 //

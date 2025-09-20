@@ -1,8 +1,8 @@
 import 'package:extended_tabs/src/extended/page_view.dart';
 import 'package:extended_tabs/src/extended/tab_controller.dart';
-import 'package:extended_tabs/src/gesture/link_controller.dart';
-import 'package:extended_tabs/src/gesture/link_scroll_state.dart';
-import 'package:extended_tabs/src/gesture/scroll_physics.dart';
+import 'package:extended_tabs/src/gestures/link_controller.dart';
+import 'package:extended_tabs/src/gestures/link_scroll_state.dart';
+import 'package:extended_tabs/src/gestures/scroll_physics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
