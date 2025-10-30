@@ -14,6 +14,11 @@ const ScrollPhysics _defaultScrollPhysics = NeverScrollableScrollPhysics();
 /// todo check, add by doersoul@126.com
 typedef ExtendedTransformer = Widget Function(Widget cld, int idx, double pos);
 
+final Widget _edge = GestureDetector(
+  behavior: HitTestBehavior.opaque,
+  child: const SizedBox(width: 20, height: double.infinity),
+);
+
 class ExtendedTabBarView extends _TabBarView {
   const ExtendedTabBarView({
     super.key,
@@ -32,6 +37,7 @@ class ExtendedTabBarView extends _TabBarView {
     this.onTabActive,
     this.onDragTab,
     this.transformer,
+    this.addEdge = false,
   });
 
   /// cache page count
@@ -94,6 +100,8 @@ class ExtendedTabBarView extends _TabBarView {
 
   /// todo check, add by doersoul@126.com
   final ExtendedTransformer? transformer;
+
+  final bool addEdge;
 
   @override
   State<ExtendedTabBarView> createState() => ExtendedTabBarViewState();
@@ -267,7 +275,22 @@ class ExtendedTabBarViewState extends _TabBarViewState<ExtendedTabBarView> {
       ),
     );
 
-    return buildGestureDetector(child: result);
+    Widget tabview = buildGestureDetector(child: result);
+
+    /// todo check, add by doersoul@126.com
+    if (widget.addEdge) {
+      tabview = Stack(
+        children: [
+          tabview,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [_edge, _edge],
+          ),
+        ],
+      );
+    }
+
+    return tabview;
   }
 
   bool _handleGlowNotification(OverscrollIndicatorNotification notification) {
